@@ -1,5 +1,7 @@
 from django.http import Http404
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+
+from random import choice
 
 from . import util
 
@@ -18,3 +20,7 @@ def entry_page(request, title):
         })
     
     raise Http404("Page not found")
+
+def random(request):
+    page = choice(util.list_entries())
+    return redirect("entry", title=page)
