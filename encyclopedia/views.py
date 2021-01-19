@@ -13,7 +13,8 @@ def entry_page(request, title):
     entry =  util.get_entry(title)
     if entry:
         return render(request, "encyclopedia/entry.html", {
+            "title": title,
             "entry": entry,
         })
     
-    raise Http404("Entry not found")
+    raise Http404("Page not found")
