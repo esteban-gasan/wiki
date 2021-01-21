@@ -24,3 +24,28 @@ def entry_page(request, title):
 def random(request):
     page = choice(util.list_entries())
     return redirect("entry", title=page)
+
+def search(request):
+    if request.method == "GET":
+        query = request.GET.get("q")
+        if query:
+            query_lower = query.lower()
+            entries = util.list_entries()
+            results = []
+
+            for entry in entries:
+                entry_lower = entry.lower()
+                if query_lower == entry_lower:
+                    return redirect("entry", title=entry)
+                elif query_lower in entry_lower:
+                    results.append(entry)
+            
+            return render(request, "encyclopedia/search.html", {
+                "query": query,
+                "results": results,
+                "total": len(results)
+            })
+    
+        else:
+            return render(request, "encyclopedia/search.html")
+    
