@@ -19,6 +19,11 @@ class CreateEntryForm(forms.Form):
 
         return data
 
+
+class EditEntryForm(forms.Form):
+    content = forms.CharField(label=False, widget=forms.Textarea)
+
+
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -34,6 +39,25 @@ def entry_page(request, title):
         })
     
     raise Http404("Page not found")
+
+
+def edit_entry(request, title):
+    entry = util.get_entry(title)
+    if entry:
+        if request.method == "POST":
+            form = EditEntryForm(request.POST)
+            if form.is_valid():
+                content = form.cleaned_data["content"]
+                util.save_entry(title, content.encode('ascii'))
+                return redirect("entry", title=title)
+        
+        data = {"content": entry}
+        return render(request, "encyclopedia/edit.html", {
+            "title": title,
+            "form": EditEntryForm(initial=data)
+        })
+
+    raise Http404(f"'{title}' does not exist")
 
 
 def search(request):
@@ -83,4 +107,3 @@ def new(request):
 def random(request):
     page = choice(util.list_entries())
     return redirect("entry", title=page)
-   
