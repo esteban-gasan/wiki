@@ -3,6 +3,8 @@ from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.shortcuts import redirect, render
 
+import markdown2
+import re
 from random import choice
 
 from . import util
@@ -35,7 +37,7 @@ def entry_page(request, title):
     if entry:
         return render(request, "encyclopedia/entry.html", {
             "title": title,
-            "entry": entry,
+            "entry": markdown2.markdown(entry)
         })
     
     raise Http404("Page not found")
@@ -44,14 +46,18 @@ def entry_page(request, title):
 def edit_entry(request, title):
     entry = util.get_entry(title)
     if entry:
+        pattern = re.compile(r"#[ \t]+.+\s*")
+        title_part = re.match(pattern, entry).group()
+        content_part = re.sub(pattern, "", entry, 1)
+
         if request.method == "POST":
             form = EditEntryForm(request.POST)
             if form.is_valid():
-                content = form.cleaned_data["content"]
+                content = f"{title_part}{form.cleaned_data['content']}"
                 util.save_entry(title, content.encode('ascii'))
                 return redirect("entry", title=title)
-        
-        data = {"content": entry}
+
+        data = {"content": content_part}
         return render(request, "encyclopedia/edit.html", {
             "title": title,
             "form": EditEntryForm(initial=data)
