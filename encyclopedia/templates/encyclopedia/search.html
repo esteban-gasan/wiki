@@ -11,12 +11,12 @@
         <ul>
             {% for result in results %}
                 <li>
-                    <a href="{% url 'entry' result %}">{{ result }}</a>
+                    <a href="{% url 'encyclopedia:entry' result %}">{{ result }}</a>
                 </li>
             {% endfor %}
         </ul>
     {% else %}
         <h3>No search query given</h3>
     {% endif %}
-        
+
 {% endblock %}

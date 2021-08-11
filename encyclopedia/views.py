@@ -66,7 +66,7 @@ def edit_entry(request, title):
         if form.is_valid():
             content = f"{title_part}{form.cleaned_data['content']}"
             util.save_entry(title, content)
-            return redirect("entry", title=title)
+            return redirect("encyclopedia:entry", title=title)
         else:
             return render(request, "encyclopedia/edit.html", {
                 "title": title,
@@ -89,7 +89,7 @@ def search(request):
     for entry in entries:
         entry_lower = entry.lower()
         if query_lower == entry_lower:
-            return redirect("entry", title=entry)
+            return redirect("encyclopedia:entry", title=entry)
         elif query_lower in entry_lower:
             results.append(entry)
 
@@ -112,7 +112,7 @@ def new(request):
             title = form.cleaned_data["entry_title"]
             content = f"# {title}\n\n{form.cleaned_data['entry_content']}"
             util.save_entry(title, content)
-            return redirect("entry", title=title)
+            return redirect("encyclopedia:entry", title=title)
         else:
             return render(request, "encyclopedia/new.html", {
                 "form": form
@@ -121,4 +121,4 @@ def new(request):
 
 def random(request):
     page = choice(util.list_entries())
-    return redirect("entry", title=page)
+    return redirect("encyclopedia:entry", title=page)

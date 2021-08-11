@@ -7,7 +7,7 @@
 {% block body %}
     <h1>Create New Page</h1>
 
-    <form action="{% url 'new' %}" method="POST">
+    <form action="{% url 'encyclopedia:new' %}" method="POST">
         {% csrf_token %}
         {{ form.as_p }}
         <button type="submit">Create Page</button>
