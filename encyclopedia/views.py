@@ -11,8 +11,10 @@ from . import util
 
 
 class CreateEntryForm(forms.Form):
-    entry_title = forms.CharField(label="Entry title", max_length=255)
-    entry_content = forms.CharField(label="Content", widget=forms.Textarea)
+    entry_title = forms.CharField(label="Title", max_length=255, widget=forms.TextInput(
+        attrs={"class": "form-control"}))
+    entry_content = forms.CharField(label="Content", widget=forms.Textarea(
+        attrs={"class": "form-control", "rows": "15"}))
 
     def clean_entry_title(self):
         data = self.cleaned_data["entry_title"]
@@ -23,7 +25,8 @@ class CreateEntryForm(forms.Form):
 
 
 class EditEntryForm(forms.Form):
-    content = forms.CharField(label=False, widget=forms.Textarea)
+    content = forms.CharField(label=False, widget=forms.Textarea(
+        attrs={"class": "form-control", "rows": "15"}))
 
 
 def index(request):
