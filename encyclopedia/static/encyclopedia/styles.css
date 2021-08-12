@@ -1,5 +1,6 @@
 body {
     margin: 0;
+    padding: 0;
     background-color: white;
 }
 
@@ -18,21 +19,28 @@ textarea {
 }
 
 .main {
-    padding: 10px;
+    flex-grow: 1;
+    padding: 20px;
 }
 
 .search {
-    width: 100%;
+    width: 200px;
     font-size: 15px;
     line-height: 15px;
 }
 
 .sidebar {
     background-color: #f0f0f0;
-    height: 100vh;
+    min-width: 250px;
+    max-width: 250px;
     padding: 20px;
 }
 
 .sidebar h2 {
     margin-top: 5px;
+}
+
+.wrapper {
+    display: flex;
+    height: 100vh;
 }
