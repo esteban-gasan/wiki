@@ -27,6 +27,7 @@ textarea {
     width: 200px;
     font-size: 15px;
     line-height: 15px;
+    margin-top: 15px;
 }
 
 .sidebar {
@@ -38,6 +39,11 @@ textarea {
 
 .sidebar h2 {
     margin-top: 5px;
+    padding-left: 3px;
+}
+
+.sidebar a {
+    padding-left: 3px;
 }
 
 .wrapper {
