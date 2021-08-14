@@ -4,8 +4,8 @@ from django.http import Http404
 from django.shortcuts import redirect, render
 
 import markdown2
+import random
 import re
-from random import choice
 
 from . import util
 
@@ -51,12 +51,12 @@ def edit_entry(request, title):
     if not entry:
         raise Http404(f"'{title}' does not exist")
 
-    pattern = re.compile(r"#[ \t]+.+\s*")
-    title_part = re.match(pattern, entry).group()
-    content_part = re.sub(pattern, "", entry, 1)
+    pattern = re.compile(r"^# .+")
+    title_part = re.findall(pattern, entry)[0]
 
     if request.method == "GET":
         # Accessing the edit page
+        content_part = re.sub(pattern, "", entry).strip()
         data = {"content": content_part}
         return render(request, "encyclopedia/edit.html", {
             "title": title,
@@ -67,8 +67,8 @@ def edit_entry(request, title):
         # Submitting the form
         form = EditEntryForm(request.POST)
         if form.is_valid():
-            content = f"{title_part}{form.cleaned_data['content']}"
-            util.save_entry(title, content)
+            content = f"{title_part}\n\n{form.cleaned_data['content']}\n"
+            util.save_entry(title, content.encode())
             return redirect("encyclopedia:entry", title=title)
         else:
             return render(request, "encyclopedia/edit.html", {
@@ -113,7 +113,7 @@ def new(request):
         form = CreateEntryForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data["entry_title"]
-            content = f"# {title}\n\n{form.cleaned_data['entry_content']}"
+            content = f"# {title}\n\n{form.cleaned_data['entry_content']}\n"
             util.save_entry(title, content)
             return redirect("encyclopedia:entry", title=title)
         else:
@@ -123,5 +123,5 @@ def new(request):
 
 
 def random(request):
-    page = choice(util.list_entries())
+    page = random.choice(util.list_entries())
     return redirect("encyclopedia:entry", title=page)
