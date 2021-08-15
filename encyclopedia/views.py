@@ -38,7 +38,7 @@ def index(request):
 def entry_page(request, title):
     entry = util.get_entry(title)
     if not entry:
-        raise Http404("Page not found")
+        raise Http404(f"'{title}' does not exist")
 
     return render(request, "encyclopedia/entry.html", {
         "title": title,
@@ -122,6 +122,6 @@ def new(request):
             })
 
 
-def random(request):
+def random_entry(request):
     page = random.choice(util.list_entries())
     return redirect("encyclopedia:entry", title=page)

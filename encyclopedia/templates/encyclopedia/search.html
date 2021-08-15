@@ -1,7 +1,11 @@
 {% extends "encyclopedia/layout.html" %}
 
 {% block title %}
-    Search results
+    {% if query %}
+        {{ query }} - Search results - Wiki
+    {% else %}
+        Search results - Wiki
+    {% endif %}
 {% endblock %}
 
 {% block body %}
